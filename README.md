@@ -11,7 +11,16 @@
 - [x] LinkEntity ( uuid, tableName, title, refUuid )
 - [x] VehicleEntity ( uuid, license, provinceId, cityId, licenseColor, vin, fromDate, updateDate, thruDate )
 - [x] DeviceEntity ( deviceId, manufacturer, model, rsa, fromDate, updateDate, thruDate )
-- [x] DeviceMsgEntity ( uuid, user, vehicle, device, sim, msgId, stream, sendTime, sendData, replyId, replyTime, replyData, replyFlag)
+- [x] DeviceMsgEntity ( uuid, user, vehicle, device, sim, msgId, stream, sendTime, sendData, replyId, replyTime, 
+                        replyData, replyFlag)
 - [x] VehicleDeviceSimLink ( uuid, license, device, sim, auth, fromDate, updateDate, thruDate )
 - [x] UserGroupLink ( uuid, user, group, fromDate, updateDate, thruDate )
+- [x] DictionaryEntity ( uuid, key, value, type, fromDate, updateDate, thruDate )
+- [x] DivisionEntity ( id, name )
+- [x] TraceEntity ( uuid, sim, traceAlarm, traceStatus, longitude, latitude, height, speed, direction, receiveTime, 
+                    receiveServerTime, mileage, oilMass, recordSpeed, humanEnsureAlarmId, overSpeedPositionType, 
+                    overSpeedPositionId, inOutPositionType, inOutPositionId, inOutDirection, driveTimePositionId,
+                    driveTime, driveTimeResult, traceStatusExt, ioStatus, tirePressure, partTemp, ad0, ad1,
+                    signalStrength, gnssNumber )
+- [x] TraceAlarmEntity ( uuid, sim, alarmKey, startTime, endTime )
 

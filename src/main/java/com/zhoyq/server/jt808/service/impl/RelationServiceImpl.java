@@ -15,6 +15,7 @@ package com.zhoyq.server.jt808.service.impl;
 import com.zhoyq.server.jt808.entity.VehicleDeviceSimLink;
 import com.zhoyq.server.jt808.mapper.VehicleDeviceSimLinkMapper;
 import com.zhoyq.server.jt808.service.RelationService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +24,14 @@ import org.springframework.stereotype.Service;
  * @date 2020/5/12
  */
 @Service
+@AllArgsConstructor
 public class RelationServiceImpl implements RelationService {
 
-    @Autowired
     private VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
 
     @Override
-    public String getDeviceIdBySim(String sim) {
-        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.selectBySim(sim);
-        return link == null ? null : link.getDeviceId();
+    public String findDeviceIdBySim(String sim) {
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(sim);
+        return link == null ? null : link.getDevice();
     }
 }

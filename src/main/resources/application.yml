@@ -38,6 +38,7 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 jt808:
+  enabled: false
   use: mina
   protocol: tcp
   port: 10001

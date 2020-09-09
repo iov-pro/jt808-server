@@ -12,40 +12,18 @@
  *  创建时间：2020
  */
 
-package com.zhoyq.server.jt808.entity;
+package com.zhoyq.server.jt808.constant;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * @author Zhoyq &lt;feedback@zhoyq.com&gt;
- * @date 2020-09-08
+ * @date 2020-09-09
  */
-@Table(
-        name = "JT808_USER_GROUP_LINK",
-        schema = "PUBLIC"
-)
-@Entity
-@Getter
-@Setter
-public class UserGroupLink {
-    @Id
-    @Column
-    private String uuid;
-    @Column
-    private String user;
-    @Column
-    private String groupUuid;
-    @Column
-    private Date fromDate;
-    @Column
-    private Date updateDate;
-    @Column
-    private Date thruDate;
+@Data
+@AllArgsConstructor
+public class TraceStatus {
+    private String key;
+    private String value;
 }

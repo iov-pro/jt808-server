@@ -25,27 +25,29 @@ import java.util.Date;
 
 /**
  * @author Zhoyq &lt;feedback@zhoyq.com&gt;
- * @date 2020-09-08
+ * @date 2020-09-09
  */
 @Table(
-        name = "JT808_USER_GROUP_LINK",
+        name = "JT808_TRACE_ALARM",
         schema = "PUBLIC"
 )
 @Entity
 @Getter
 @Setter
-public class UserGroupLink {
+public class TraceAlarmEntity {
     @Id
     @Column
     private String uuid;
+
     @Column
-    private String user;
+    private String sim;
+
     @Column
-    private String groupUuid;
+    private String alarmKey;
+
     @Column
-    private Date fromDate;
+    private Date startTime;
+
     @Column
-    private Date updateDate;
-    @Column
-    private Date thruDate;
+    private Date endTime;
 }
