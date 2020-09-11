@@ -48,6 +48,7 @@ public class SimpleDataServiceImpl implements DataService {
     private ByteArrHelper byteArrHelper;
     private DataHelper dataHelper;
     private TraceMapper traceMapper;
+    private TraceAlarmMapper traceAlarmMapper;
 
     /**
      * 通过手机号获取设备ID
@@ -320,6 +321,54 @@ public class SimpleDataServiceImpl implements DataService {
         // 还需要保存报警信息
         Integer lastAlarm = TraceConstant.LAST_ALARM.get(phone);
         Integer currentAlarm = trace.getTraceAlarm();
+
+        if (lastAlarm == null) {
+            // 没有上一次报警信息的时候 直接保存报警信息
+            TraceConstant.LAST_ALARM.put(phone, currentAlarm);
+        } else {
+            // 存在上一次报警信息时候 根据 报警类别（持续还是点）进行存储
+            // 点报警 开始时间和结束时间是一样的
+            for (int i = 0; i < TraceConstant.TRACE_ALARMS.length; i++) {
+                var alarmInfo = TraceConstant.TRACE_ALARMS[i];
+                if (alarmInfo == null) {
+                    continue;
+                }
+
+                if (alarmInfo.getKeep()) {
+                    // 持续报警
+                    int lastFlag = (lastAlarm >> i) & 0x01;
+                    int currentFlag = (currentAlarm >> i) & 0x01;
+                    if (lastFlag == 0 && currentFlag == 1) {
+                        // 上次报警没有 这次有 表示新增
+                        var alarm = new TraceAlarmEntity();
+                        alarm.setUuid(UUID.randomUUID().toString());
+                        alarm.setAlarmKey(alarmInfo.getKey());
+                        alarm.setSim(phone);
+                        alarm.setStartTime(new Date(trace.getReceiveTime()));
+                        this.traceAlarmMapper.insert(alarm);
+                    } else if (lastFlag == 1 && currentFlag == 0){
+                        // 上次报警有 这次没有 表示结束
+                        TraceAlarmEntity alarm = this.traceAlarmMapper.findLastBySimAndKey(phone, alarmInfo.getKey());
+                        // 没有查询出来 或者 已经设置了结束时间 则不处理
+                        if (alarm != null && alarm.getEndTime() == null) {
+                            alarm.setEndTime(new Date(trace.getReceiveTime()));
+                            this.traceAlarmMapper.update(alarm);
+                        }
+                    }
+                    // 上次有 这次有 表示 持续 不用处理
+                    // 上次没有 这次没有 表示没有 不用处理
+                } else {
+                    // 点报警 新增即可
+                    var alarm = new TraceAlarmEntity();
+                    alarm.setUuid(UUID.randomUUID().toString());
+                    alarm.setAlarmKey(alarmInfo.getKey());
+                    alarm.setSim(phone);
+                    alarm.setStartTime(new Date(trace.getReceiveTime()));
+                    alarm.setEndTime(new Date(trace.getReceiveTime()));
+                    this.traceAlarmMapper.insert(alarm);
+                }
+            }
+        }
     }
 
 

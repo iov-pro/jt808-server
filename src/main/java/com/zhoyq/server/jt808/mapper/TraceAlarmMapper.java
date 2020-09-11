@@ -17,6 +17,7 @@ package com.zhoyq.server.jt808.mapper;
 import com.zhoyq.server.jt808.entity.TraceAlarmEntity;
 import com.zhoyq.server.jt808.helper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -26,4 +27,10 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface TraceAlarmMapper extends BaseMapper<TraceAlarmEntity> {
+    String TABLE_NAME = "JT808_TRACE_ALARM";
+    String COLUMNS = "uuid, sim, alarm_key as alarmKey, start_time as startTime, end_time as endTime";
+
+    @Select("select " + COLUMNS + " from " + TABLE_NAME +
+            " where sim = #{phone} and alarm_key = #{key} order by start_time desc limit 0, 1")
+    TraceAlarmEntity findLastBySimAndKey(String phone, String key);
 }
