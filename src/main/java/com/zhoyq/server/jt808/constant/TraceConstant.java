@@ -148,4 +148,5 @@ public class TraceConstant {
     };
 
     public static Map<String, Integer> LAST_ALARM = new ConcurrentHashMap<>();
+    public static Map<String, Long> LAST_ALARM_TIME = new ConcurrentHashMap<>();
 }

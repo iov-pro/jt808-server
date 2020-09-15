@@ -49,6 +49,7 @@ public class SimpleDataServiceImpl implements DataService {
     private DataHelper dataHelper;
     private TraceMapper traceMapper;
     private TraceAlarmMapper traceAlarmMapper;
+    private EventReportMapper eventReportMapper;
 
     /**
      * 通过手机号获取设备ID
@@ -244,7 +245,8 @@ public class SimpleDataServiceImpl implements DataService {
         trace.setHeight(locationInfo.getHeight());
         trace.setSpeed(locationInfo.getSpeed());
         trace.setDirection(locationInfo.getDirection());
-        trace.setReceiveTime(dataHelper.formatTraceDatetime(locationInfo.getDatetime()));
+        Long dateTime = dataHelper.formatTraceDatetime(locationInfo.getDatetime());
+        trace.setReceiveTime(dateTime);
         trace.setReceiveServerTime(System.currentTimeMillis());
 
         // 附加信息
@@ -318,14 +320,19 @@ public class SimpleDataServiceImpl implements DataService {
         // 保存
         traceMapper.insert(trace);
 
+        // 如果是历史信息的定位回传，可能会出现问题，需要使用另外的逻辑存储
+        // 这里记录 每个 手机号的上报时间 如果 时间低于当前时间 就不在记录报警信息
+        Long lastAlarmTime = TraceConstant.LAST_ALARM_TIME.get(phone);
+
+        if (lastAlarmTime != null && dateTime <= lastAlarmTime) {
+            return;
+        }
+
         // 还需要保存报警信息
         Integer lastAlarm = TraceConstant.LAST_ALARM.get(phone);
         Integer currentAlarm = trace.getTraceAlarm();
 
-        if (lastAlarm == null) {
-            // 没有上一次报警信息的时候 直接保存报警信息
-            TraceConstant.LAST_ALARM.put(phone, currentAlarm);
-        } else {
+        if (lastAlarm != null) {
             // 存在上一次报警信息时候 根据 报警类别（持续还是点）进行存储
             // 点报警 开始时间和结束时间是一样的
             for (int i = 0; i < TraceConstant.TRACE_ALARMS.length; i++) {
@@ -369,20 +376,35 @@ public class SimpleDataServiceImpl implements DataService {
                 }
             }
         }
+        // 直接保存报警信息
+        TraceConstant.LAST_ALARM.put(phone, currentAlarm);
+        TraceConstant.LAST_ALARM_TIME.put(phone, dateTime);
     }
 
 
     /**
      * 事件上报
+     * 事件上报需要先设置设备关联事件 才能查询 否则只能查到ID 这个在平台上注意
      */
     @Override
     public void eventReport(String phone, byte eventReportAnswerId) {
         log.info("{}, report", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            EventReportEntity entity = new EventReportEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setEventId(eventReportAnswerId);
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            entity.setUpdateDate(new Date(System.currentTimeMillis()));
+            entity.setThruDate(null);
+            eventReportMapper.insert(entity);
+        }
     }
 
     /**
-     *
+     * 信息点播
      */
     @Override
     public void orderInfo(String phone, byte type) {
@@ -390,54 +412,81 @@ public class SimpleDataServiceImpl implements DataService {
         // TODO
     }
 
+    /**
+     * 信息点播取消
+     */
     @Override
     public void cancelOrderInfo(String phone, byte type) {
         log.info("{}, cancel order info", phone);
         // TODO
     }
 
+    /**
+     * 电子运单上报
+     */
     @Override
     public void eBill(String phone, byte[] data) {
         log.info("{}, bill", phone);
         // TODO
     }
 
+    /**
+     * 驾驶员信息上报
+     */
     @Override
     public void driverInfo(String phone, DriverInfo driverInfo) {
         log.info("{}, driver info", phone);
         // TODO
     }
 
+    /**
+     * CAN总线数据上传
+     */
     @Override
     public void canData(String phone, CanDataInfo canDataInfo) {
         log.info("{}, can", phone);
         // TODO
     }
 
+    /**
+     * 多媒体数据上传
+     */
     @Override
     public void mediaInfo(String phone, MediaInfo mediaInfo) {
         log.info("{}, media info", phone);
         // TODO
     }
 
+    /**
+     * 存储多媒体实体信息
+     */
     @Override
     public void mediaPackage(String phone, byte[] mediaData) {
         log.info("{}, media package", phone);
         // TODO
     }
 
+    /**
+     * 数据上行透传
+     */
     @Override
     public void dataTransport(String phone, DataTransportInfo dataTransportInfo) {
         log.info("{}, data transport", phone);
         // TODO
     }
 
+    /**
+     * 数据压缩上报
+     */
     @Override
     public void compressData(String phone, byte[] data) {
         log.info("{}, compress data", phone);
         // TODO
     }
 
+    /**
+     * 终端鉴权
+     */
     @Override
     public void terminalAuth(String phone, String authId, String imei, String softVersion) {
         // TODO
