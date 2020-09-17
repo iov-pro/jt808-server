@@ -230,7 +230,7 @@ public class SimpleDataServiceImpl implements DataService {
      * 定位信息上传
      */
     @Override
-    public void terminalLocation(String phone, LocationInfo locationInfo) {
+    public void terminalLocation(String phone, LocationInfo locationInfo, Integer mediaId) {
         log.info("{}, location", phone);
         // 获取标准信息 报警信息 状态信息 以及 附加信息
         TraceEntity trace = new TraceEntity();
@@ -450,7 +450,6 @@ public class SimpleDataServiceImpl implements DataService {
 
     /**
      * 多媒体数据上传
-     * FIXME 无法连接 多媒体信息 定位信息 和 实体 三者， 需要额外的信息关联这三者
      */
     @Override
     public void mediaInfo(String phone, MediaInfo mediaInfo) {
@@ -462,7 +461,7 @@ public class SimpleDataServiceImpl implements DataService {
      * 存储多媒体实体信息
      */
     @Override
-    public void mediaPackage(String phone, byte[] mediaData) {
+    public void mediaPackage(String phone, byte[] mediaData, Integer mediaId) {
         log.info("{}, media package", phone);
         // TODO
     }
