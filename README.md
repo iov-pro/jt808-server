@@ -24,3 +24,27 @@
                     signalStrength, gnssNumber )
 - [x] TraceAlarmEntity ( uuid, sim, alarmKey, startTime, endTime )
 
+### 事件上报相关
+
+- [x] EventEntity
+- [x] EventReportEntity
+- [x] DeviceEventEntity
+
+### 信息点播相关
+
+- [ ] InfoEntity
+- [ ] InfoOrderEntity
+- [ ] DeviceInfoEntity
+
+### 电子运单相关
+
+- [ ] ElectronicWaybillEntity
+
+### 驾驶员信息相关
+
+- [ ] DriverInfoEntity
+
+### CAN总线 多媒体 透传 压缩
+
+- [ ] MediaEntity 多媒体信息（不含实体）
+- [ ] UploadDataEntity 包含CAN总线、多媒体实体、透传数据、压缩数据

@@ -450,6 +450,7 @@ public class SimpleDataServiceImpl implements DataService {
 
     /**
      * 多媒体数据上传
+     * FIXME 无法连接 多媒体信息 定位信息 和 实体 三者， 需要额外的信息关联这三者
      */
     @Override
     public void mediaInfo(String phone, MediaInfo mediaInfo) {
@@ -486,14 +487,15 @@ public class SimpleDataServiceImpl implements DataService {
 
     /**
      * 终端鉴权
+     * 不需要操作 因为注册的时候已经配置了鉴权码 不保存也可以鉴权成功
+     * 可以作为记录使用
      */
     @Override
-    public void terminalAuth(String phone, String authId, String imei, String softVersion) {
-        // TODO
-    }
+    public void terminalAuth(String phone, String authId, String imei, String softVersion) { }
 
     /**
      * 设置鉴权信息
+     * 程序启动时 通过此接口 获取所有已经鉴权的信息 保证终端正常鉴权
      */
     @Override
     public List<SimAuthDto> simAuth() {
