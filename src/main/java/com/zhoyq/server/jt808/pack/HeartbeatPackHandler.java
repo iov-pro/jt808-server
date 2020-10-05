@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class HeartbeatPackHandler implements PackHandler {
 
-    private ResHelper resHelper;
+    ResHelper resHelper;
 
     @Override
     public byte[] handle(byte[] phoneNum, byte[] streamNum, byte[] msgId, byte[] msgBody) {

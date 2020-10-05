@@ -14,6 +14,7 @@
 
 package com.zhoyq.server.jt808.helper;
 
+import com.zhoyq.server.jt808.starter.config.Const;
 import com.zhoyq.server.jt808.starter.entity.AlarmInfo;
 import com.zhoyq.server.jt808.starter.entity.StatusInfo;
 import com.zhoyq.server.jt808.starter.helper.ByteArrHelper;
@@ -33,11 +34,11 @@ import java.util.Date;
 @Component
 @AllArgsConstructor
 public class DataHelper {
-    private ByteArrHelper byteArrHelper;
+    ByteArrHelper byteArrHelper;
 
     public Integer formatTracePartTemp(byte[] data){
         int rev = 1;
-        if ((data[0] & 0x80) == 0x80) {
+        if ((data[0] & Const.BIN_0X80) == Const.BIN_0X80) {
             rev = -1;
         }
         return rev * byteArrHelper.twobyte2int(new byte[]{(byte)(data[0] & 0x7f), data[1]});
@@ -49,7 +50,7 @@ public class DataHelper {
         return date == null ? 0L : date.getTime();
     }
 
-    public Date formatDatetimems(String datetime) {
+    public Date formatDatetimeMs(String datetime) {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yy-MM-dd-HH-mm-ss-ssss");
         try {

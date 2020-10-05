@@ -514,7 +514,7 @@ public class SimpleDataServiceImpl implements DataService {
             entity.setData(canDataInfo.getData());
             entity.setType("can");
             entity.setFromDate(new Date(canDataInfo.getTimestamp()));
-            entity.setReceiveDate(dataHelper.formatDatetimems(canDataInfo.getReceiveTime()));
+            entity.setReceiveDate(dataHelper.formatDatetimeMs(canDataInfo.getReceiveTime()));
             uploadDataMapper.insert(entity);
         }
     }

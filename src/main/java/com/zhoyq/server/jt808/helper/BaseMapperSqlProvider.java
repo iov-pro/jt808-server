@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class BaseMapperSqlProvider {
 
-    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+    private static final Pattern humpPattern = Pattern.compile("[A-Z]");
 
     public static String humpToLine(String str) {
         Matcher matcher = humpPattern.matcher(str);
@@ -89,15 +89,14 @@ public class BaseMapperSqlProvider {
 
     private <T> void fillWhereId(SQL sql, Class<T> clazz){
         Field[] declaredFields = clazz.getDeclaredFields();
-        for(int i=0; i<declaredFields.length; i++){
-            Field field = declaredFields[i];
+        for (Field field : declaredFields) {
             Id idInfo = field.getAnnotation(Id.class);
-            if(idInfo != null){
+            if (idInfo != null) {
                 Column columnInfo = field.getAnnotation(Column.class);
                 String columnName;
-                if("".equals(columnInfo.name())){
+                if ("".equals(columnInfo.name())) {
                     columnName = humpToLine(field.getName());
-                }else{
+                } else {
                     columnName = columnInfo.name();
                 }
                 sql.WHERE(columnName + "=#{id}");
@@ -108,15 +107,14 @@ public class BaseMapperSqlProvider {
 
     private <T> void fillWhereIdName(SQL sql, Class<T> clazz){
         Field[] declaredFields = clazz.getDeclaredFields();
-        for(int i=0; i<declaredFields.length; i++){
-            Field field = declaredFields[i];
+        for (Field field : declaredFields) {
             Id idInfo = field.getAnnotation(Id.class);
-            if(idInfo != null){
+            if (idInfo != null) {
                 Column columnInfo = field.getAnnotation(Column.class);
                 String columnName;
-                if("".equals(columnInfo.name())){
+                if ("".equals(columnInfo.name())) {
                     columnName = humpToLine(field.getName());
-                }else{
+                } else {
                     columnName = columnInfo.name();
                 }
                 sql.WHERE(columnName + "=#{" + field.getName() + "}");
@@ -127,47 +125,45 @@ public class BaseMapperSqlProvider {
 
     private <T> void fillValues(SQL sql, T bean) {
         Field[] declaredFields = bean.getClass().getDeclaredFields();
-        for(int i=0; i<declaredFields.length; i++){
-            Field field = declaredFields[i];
-            if(checkIdAndGen(field)){
+        for (Field field : declaredFields) {
+            if (checkIdAndGen(field)) {
                 continue;
             }
             Column columnInfo = field.getAnnotation(Column.class);
-            if(columnInfo != null){
+            if (columnInfo != null) {
                 String columnName;
-                if("".equals(columnInfo.name())){
+                if ("".equals(columnInfo.name())) {
                     columnName = humpToLine(field.getName());
-                }else{
+                } else {
                     columnName = columnInfo.name();
                 }
-                sql.VALUES(columnName, "#{"+field.getName()+"}");
+                sql.VALUES(columnName, "#{" + field.getName() + "}");
             }
         }
     }
 
     private <T> void fillSets(SQL sql, T bean, boolean flag) throws IllegalAccessException {
         Field[] declaredFields = bean.getClass().getDeclaredFields();
-        for(int i=0; i<declaredFields.length; i++){
-            Field field = declaredFields[i];
-            if(checkId(field)){
+        for (Field field : declaredFields) {
+            if (checkId(field)) {
                 continue;
             }
             Column columnInfo = field.getAnnotation(Column.class);
-            if(columnInfo != null){
+            if (columnInfo != null) {
                 String columnName;
-                if("".equals(columnInfo.name())){
+                if ("".equals(columnInfo.name())) {
                     columnName = humpToLine(field.getName());
-                }else{
+                } else {
                     columnName = columnInfo.name();
                 }
-                if(flag){
+                if (flag) {
                     field.setAccessible(true);
                     Object val = field.get(bean);
-                    if(val != null){
-                        sql.SET(columnName + "=#{"+field.getName()+"}");
+                    if (val != null) {
+                        sql.SET(columnName + "=#{" + field.getName() + "}");
                     }
-                }else{
-                    sql.SET(columnName + "=#{"+field.getName()+"}");
+                } else {
+                    sql.SET(columnName + "=#{" + field.getName() + "}");
                 }
             }
         }

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class RelationServiceImpl implements RelationService {
 
-    private VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
+    VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
 
     @Override
     public String findDeviceIdBySim(String sim) {
