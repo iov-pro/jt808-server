@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Zhoyq &lt;feedback@zhoyq.com&gt;
@@ -44,16 +45,42 @@ public class DataHelper {
 
 
     public Long formatTraceDatetime(String datetime) {
-        long res = 0L;
-        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
+        Date date = formatDatetime(datetime);
+        return date == null ? 0L : date.getTime();
+    }
+
+    public Date formatDatetimems(String datetime) {
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yy-MM-dd-HH-mm-ss-ssss");
         try {
-            res = sdf.parse(datetime).getTime();
+            return sdf2.parse(sdf1.format(new Date()) + "-" + datetime);
         } catch (ParseException e) {
             log.warn(e.getMessage());
+            return null;
         }
-        return res;
-
     }
+
+    public Date formatDatetime(String datetime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
+        try {
+            return sdf.parse(datetime);
+        } catch (ParseException e) {
+            log.warn(e.getMessage());
+            return null;
+        }
+    }
+
+    public Date formatDate(String datetime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        try {
+            return sdf.parse(datetime);
+        } catch (ParseException e) {
+            log.warn(e.getMessage());
+            return null;
+        }
+    }
+
+
 
     public Integer genTraceAlarm(AlarmInfo alarmInfo) {
         int buf = 0x00000000;

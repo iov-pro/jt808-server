@@ -24,7 +24,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 事件表
+ * 事件上报表
  * @author zhoyq <a href="mailto:feedback@zhoyq.com">feedback@zhoyq.com</a>
  * @date 2020/09/15
  */

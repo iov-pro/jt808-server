@@ -128,6 +128,10 @@ public class ApplicationAware implements ApplicationContextAware {
             } catch (IOException e) {
                 log.warn(e.getMessage());
             }
+
+            log.info("system init success !");
+        } else {
+            log.info("system already init !");
         }
     }
 

@@ -40,16 +40,21 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SimpleDataServiceImpl implements DataService {
 
-    private RelationService relationService;
-    private DeviceMapper deviceMapper;
-    private DeviceMsgMapper deviceMsgMapper;
-    private VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
-    private VehicleMapper vehicleMapper;
-    private ByteArrHelper byteArrHelper;
-    private DataHelper dataHelper;
-    private TraceMapper traceMapper;
-    private TraceAlarmMapper traceAlarmMapper;
-    private EventReportMapper eventReportMapper;
+    RelationService relationService;
+    DeviceMapper deviceMapper;
+    DeviceMsgMapper deviceMsgMapper;
+    VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
+    VehicleMapper vehicleMapper;
+    ByteArrHelper byteArrHelper;
+    DataHelper dataHelper;
+    TraceMapper traceMapper;
+    TraceAlarmMapper traceAlarmMapper;
+    EventReportMapper eventReportMapper;
+    InfoOrderMapper infoOrderMapper;
+    ElectronicWaybillMapper electronicWaybillMapper;
+    DriverInfoMapper driverInfoMapper;
+    UploadDataMapper uploadDataMapper;
+    MediaMapper mediaMapper;
 
     /**
      * 通过手机号获取设备ID
@@ -398,7 +403,6 @@ public class SimpleDataServiceImpl implements DataService {
             entity.setEventId(eventReportAnswerId);
             entity.setFromDate(new Date(System.currentTimeMillis()));
             entity.setUpdateDate(new Date(System.currentTimeMillis()));
-            entity.setThruDate(null);
             eventReportMapper.insert(entity);
         }
     }
@@ -409,7 +413,22 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void orderInfo(String phone, byte type) {
         log.info("{}, order info", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            // 需要检查是否已经点播
+            InfoOrderEntity entity = infoOrderMapper.selectByDeviceIdAndInfoType(deviceId, type);
+            if (entity == null) {
+                // 没有点播才新建
+                entity = new InfoOrderEntity();
+                entity.setUuid(UUID.randomUUID().toString());
+                entity.setDeviceId(deviceId);
+                entity.setInfoType(type);
+                entity.setFromDate(new Date(System.currentTimeMillis()));
+                entity.setUpdateDate(new Date(System.currentTimeMillis()));
+                infoOrderMapper.insert(entity);
+            }
+        }
     }
 
     /**
@@ -418,7 +437,16 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void cancelOrderInfo(String phone, byte type) {
         log.info("{}, cancel order info", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            // 需要检查是否已经点播
+            InfoOrderEntity entity = infoOrderMapper.selectByDeviceIdAndInfoType(deviceId, type);
+            if (entity != null) {
+                // 没有点播才新建
+                infoOrderMapper.delete(InfoOrderEntity.class, entity.getUuid());
+            }
+        }
     }
 
     /**
@@ -427,7 +455,17 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void eBill(String phone, byte[] data) {
         log.info("{}, bill", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            ElectronicWaybillEntity entity = new ElectronicWaybillEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setData(data);
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            entity.setUpdateDate(new Date(System.currentTimeMillis()));
+            electronicWaybillMapper.insert(entity);
+        }
     }
 
     /**
@@ -436,7 +474,29 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void driverInfo(String phone, DriverInfo driverInfo) {
         log.info("{}, driver info", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null && driverInfo.isSuccess()) {
+            String deviceId = link.getDevice();
+            DriverInfoEntity entity = new DriverInfoEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setDriverName(driverInfo.getDriverName());
+            entity.setIdCardNumber(driverInfo.getIdCardNumber());
+            entity.setCertificateNumber(driverInfo.getCertificateNumber());
+            entity.setCertificatePublishAgentName(driverInfo.getCertificatePublishAgentName());
+            entity.setCertificateLimitDate(dataHelper.formatDate(driverInfo.getCertificateLimitDate()));
+            entity.setDatetime(dataHelper.formatDatetime(driverInfo.getDatetime()));
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            DriverAlarmInfo driverAlarmInfo = driverInfo.getDriverAlarmInfo();
+            if (driverAlarmInfo != null) {
+                entity.setPullOutCard(driverAlarmInfo.isPullOutCard());
+                entity.setPullOut(driverAlarmInfo.isPullOut());
+                entity.setCheckFailed(driverAlarmInfo.isCheckFailed());
+                entity.setLocked(driverAlarmInfo.isLocked());
+                entity.setUnAuthentication(driverAlarmInfo.isUnAuthentication());
+            }
+            driverInfoMapper.insert(entity);
+        }
     }
 
     /**
@@ -445,7 +505,18 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void canData(String phone, CanDataInfo canDataInfo) {
         log.info("{}, can", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            UploadDataEntity entity = new UploadDataEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setData(canDataInfo.getData());
+            entity.setType("can");
+            entity.setFromDate(new Date(canDataInfo.getTimestamp()));
+            entity.setReceiveDate(dataHelper.formatDatetimems(canDataInfo.getReceiveTime()));
+            uploadDataMapper.insert(entity);
+        }
     }
 
     /**
@@ -454,7 +525,20 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void mediaInfo(String phone, MediaInfo mediaInfo) {
         log.info("{}, media info", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            MediaEntity entity = new MediaEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            entity.setMediaId(mediaInfo.getMediaId());
+            entity.setMediaType(mediaInfo.getMediaType());
+            entity.setMediaFormat(mediaInfo.getMediaFormat());
+            entity.setEventNumber(mediaInfo.getEventNumber());
+            entity.setTunnelId(mediaInfo.getTunnelId());
+            mediaMapper.insert(entity);
+        }
     }
 
     /**
@@ -463,7 +547,18 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void mediaPackage(String phone, byte[] mediaData, Integer mediaId) {
         log.info("{}, media package", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            UploadDataEntity entity = new UploadDataEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setData(mediaData);
+            entity.setType("media");
+            entity.setMediaId(mediaId);
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            uploadDataMapper.insert(entity);
+        }
     }
 
     /**
@@ -472,7 +567,18 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void dataTransport(String phone, DataTransportInfo dataTransportInfo) {
         log.info("{}, data transport", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            UploadDataEntity entity = new UploadDataEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setData(dataTransportInfo.getData());
+            entity.setType("transport");
+            entity.setTransportType(dataTransportInfo.getType());
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            uploadDataMapper.insert(entity);
+        }
     }
 
     /**
@@ -481,7 +587,17 @@ public class SimpleDataServiceImpl implements DataService {
     @Override
     public void compressData(String phone, byte[] data) {
         log.info("{}, compress data", phone);
-        // TODO
+        VehicleDeviceSimLink link = vehicleDeviceSimLinkMapper.findBySim(phone);
+        if (link != null) {
+            String deviceId = link.getDevice();
+            UploadDataEntity entity = new UploadDataEntity();
+            entity.setUuid(UUID.randomUUID().toString());
+            entity.setDeviceId(deviceId);
+            entity.setData(data);
+            entity.setType("compress");
+            entity.setFromDate(new Date(System.currentTimeMillis()));
+            uploadDataMapper.insert(entity);
+        }
     }
 
     /**

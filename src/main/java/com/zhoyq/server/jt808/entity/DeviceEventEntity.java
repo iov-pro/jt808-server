@@ -51,7 +51,7 @@ public class DeviceEventEntity {
      * 关联的事件ID
      */
     @Column
-    private Long eventUuid;
+    private String eventUuid;
 
     /**
      * 终端中的对应ID

@@ -32,19 +32,19 @@
 
 ### 信息点播相关
 
-- [ ] InfoEntity
-- [ ] InfoOrderEntity
-- [ ] DeviceInfoEntity
+- [x] InfoEntity
+- [x] InfoOrderEntity
+- [x] DeviceInfoEntity
 
 ### 电子运单相关
 
-- [ ] ElectronicWaybillEntity
+- [x] ElectronicWaybillEntity
 
 ### 驾驶员信息相关
 
-- [ ] DriverInfoEntity
+- [x] DriverInfoEntity
 
 ### CAN总线 多媒体 透传 压缩
 
-- [ ] MediaEntity 多媒体信息（不含实体）
-- [ ] UploadDataEntity 包含CAN总线、多媒体实体、透传数据、压缩数据
+- [x] MediaEntity 多媒体信息（不含实体）
+- [x] UploadDataEntity 包含CAN总线、多媒体实体、透传数据、压缩数据
