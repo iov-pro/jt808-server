@@ -43,7 +43,8 @@ jt808:
   protocol: tcp
   port: 10001
   auth: true
-  authMsgId: "0100,0102"
+  # 终端注销 0003 不推荐开放，一般终端都会存储鉴权码，防止恶意注销
+  authMsgId: "0003,0100,0102"
   processCount: 2
   corePoolSize: 1
   maximumPoolSize: 10

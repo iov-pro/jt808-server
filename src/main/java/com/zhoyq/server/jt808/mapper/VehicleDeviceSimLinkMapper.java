@@ -28,7 +28,7 @@ import org.springframework.stereotype.Repository;
 public interface VehicleDeviceSimLinkMapper extends BaseMapper<VehicleDeviceSimLink> {
     String TABLE_NAME = "JT808_LINK_VEHICLE_DEVICE_SIM";
     String EXIST_CONDITION = "and (thru_date is null or thru_date > CURRENT_TIMESTAMP)";
-    String COLUMNS = "uuid, sim, vehicle, device, auth, from_date as fromDate, thru_date as thruDate";
+    String COLUMNS = "uuid, sim, license, device, auth, from_date as fromDate, thru_date as thruDate";
 
     /**
      * 通过 uuid 关闭卡号 车辆 和 设备之间的关联
