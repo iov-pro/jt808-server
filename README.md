@@ -76,6 +76,11 @@ java -jar target/jt808-server.jar
 # 808 服务端口默认是 10001
 ```
 
+除了源码打包的方式还可以直接下载已经打好的jar包，要求JDK版本在15及以上。
+
+- 链接：[https://pan.baidu.com/s/1Mf7ycHFb3MHMRIlvYbjRfw](https://pan.baidu.com/s/1Mf7ycHFb3MHMRIlvYbjRfw) 
+- 提取码：`1g2r`
+
 ## FAQ
 
 暂无
