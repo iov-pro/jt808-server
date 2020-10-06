@@ -8,7 +8,7 @@
 
 ### v1.0.0
 
-- 使用内嵌数据库 HsqlDB（自动创建数据库表，理论上兼容 `Mysql` 数据库，如果遇到问题可以提交 [`ISSUE`](https://github.com/zhoyq/spring-boot-starter-jt808/issues) ）
+- 使用内嵌数据库 HsqlDB（自动创建数据库表，理论上兼容 `Mysql` 数据库，如果遇到问题可以提交 [`ISSUE`](https://github.com/iov-pro/jt808-server/issues) ）
 - 多租户数据结构
 - 完整存储 808 协议相关数据
 - 依赖 [spring-boot-starter-jt808](https://github.com/zhoyq/spring-boot-starter-jt808) 并保持最新版本
