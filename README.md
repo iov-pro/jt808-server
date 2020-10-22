@@ -6,6 +6,10 @@
 
 ## 版本特性
 
+### v1.0.1
+
+- 支持 `Mysql5` 版本的数据库，启动参数 `--spring.profiles.active=mysql5`
+
 ### v1.0.0
 
 - 使用内嵌数据库 HsqlDB（自动创建数据库表，理论上兼容 `Mysql` 数据库，如果遇到问题可以提交 [`ISSUE`](https://github.com/iov-pro/jt808-server/issues) ）
@@ -71,8 +75,10 @@
 ```bash
 # 打包
 mvn clean package
-# 运行
+# 运行 （默认 HSQLDB）
 java -jar target/jt808-server.jar
+# 运行 （使用 MYSQL5）
+# java -jar target/jt808-server.jar --spring.profiles.active=mysql5
 # 808 服务端口默认是 10001
 ```
 

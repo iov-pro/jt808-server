@@ -27,8 +27,7 @@ import java.util.Date;
  * @date 2020/4/25
  */
 @Table(
-        name = "JT808_LINK_VEHICLE_DEVICE_SIM",
-        schema = "PUBLIC"
+        name = "JT808_LINK_VEHICLE_DEVICE_SIM"
 )
 @Entity
 @Getter

@@ -105,7 +105,7 @@ public class ApplicationAware implements ApplicationContextAware {
             dics.add(this.genDic("系统标识", "init", "true"));
 
             for (DictionaryEntity d: dics ) {
-                if (dictionaryMapper.findByTypeAndKey(d.getType(), d.getKey()) == null) {
+                if (dictionaryMapper.findByTypeAndKey(d.getType(), d.getDicKey()) == null) {
                     dictionaryMapper.insert(d);
                 }
             }
@@ -139,7 +139,7 @@ public class ApplicationAware implements ApplicationContextAware {
         DictionaryEntity entity = new DictionaryEntity();
         entity.setUuid(UUID.randomUUID().toString());
         entity.setType(type);
-        entity.setKey(key);
+        entity.setDicKey(key);
         entity.setValue(value);
         entity.setFromDate(new Date(System.currentTimeMillis()));
         return entity;

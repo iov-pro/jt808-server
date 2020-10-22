@@ -25,7 +25,6 @@ import java.util.Date;
  */
 @Table(
         name = "JT808_VEHICLE",
-        schema = "PUBLIC",
         indexes = {
                 @Index(name = "JT808_VEHICLE_INDEX_1", columnList = "license")
         }

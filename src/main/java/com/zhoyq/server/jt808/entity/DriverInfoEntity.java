@@ -28,8 +28,7 @@ import java.util.Date;
  * @date 2020/10/5
  */
 @Table(
-        name = "JT808_DRIVER_INFO",
-        schema = "PUBLIC"
+        name = "JT808_DRIVER_INFO"
 )
 @Entity
 @Getter

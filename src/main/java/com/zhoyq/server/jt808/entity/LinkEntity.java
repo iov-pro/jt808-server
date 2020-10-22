@@ -27,8 +27,7 @@ import javax.persistence.Table;
  * @date 2020-09-08
  */
 @Table(
-        name = "JT808_LINK",
-        schema = "PUBLIC"
+        name = "JT808_LINK"
 )
 @Entity
 @Getter

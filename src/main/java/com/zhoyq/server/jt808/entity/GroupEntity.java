@@ -28,8 +28,7 @@ import java.util.Date;
  * @date 2020-09-08
  */
 @Table(
-        name = "JT808_GROUP",
-        schema = "PUBLIC"
+        name = "JT808_GROUP"
 )
 @Entity
 @Getter

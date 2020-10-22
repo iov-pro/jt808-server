@@ -14,12 +14,14 @@
 
 package com.zhoyq.server.jt808.entity;
 
-import com.zhoyq.server.jt808.constant.Defaults;
 import com.zhoyq.server.jt808.mapper.InfoOrderMapper;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -28,8 +30,7 @@ import java.util.Date;
  * @date 2020/10/04
  */
 @Table(
-        name = InfoOrderMapper.TABLE_NAME,
-        schema = Defaults.SCHEMA
+        name = InfoOrderMapper.TABLE_NAME
 )
 @Entity
 @Getter

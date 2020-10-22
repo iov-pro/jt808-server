@@ -14,12 +14,10 @@
 
 package com.zhoyq.server.jt808.mapper;
 
-import com.zhoyq.server.jt808.entity.DeviceEntity;
 import com.zhoyq.server.jt808.entity.DictionaryEntity;
 import com.zhoyq.server.jt808.helper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,12 +29,12 @@ import org.springframework.stereotype.Repository;
 public interface DictionaryMapper extends BaseMapper<DictionaryEntity> {
     String TABLE_NAME = "JT808_DICTIONARY";
     String EXIST_CONDITION = "and (thru_date is null or thru_date > CURRENT_TIMESTAMP)";
-    String COLUMNS = "uuid, key, value, type, from_date as fromDate, update_date as updateDate, thru_date as thruDate";
+    String COLUMNS = "uuid, dic_key as dicKey, value, type, from_date as fromDate, update_date as updateDate, thru_date as thruDate";
 
 
     @Select("select " + COLUMNS +
             " from " + TABLE_NAME +
-            " where type = #{type} and key = #{key} " + EXIST_CONDITION)
+            " where type = #{type} and dic_key = #{key} " + EXIST_CONDITION)
     DictionaryEntity findByTypeAndKey(String type, String key);
 
 }

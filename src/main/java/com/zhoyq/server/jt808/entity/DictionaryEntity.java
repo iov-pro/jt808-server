@@ -26,11 +26,10 @@ import java.util.Date;
  */
 @Table(
         name = "JT808_DICTIONARY",
-        schema = "PUBLIC",
         indexes = {
                 @Index(
                         name = "JT808_DICTIONARY_INDEX_TYPE_KEY",
-                        columnList = "type, key"
+                        columnList = "type, dicKey"
                 )
         }
 
@@ -44,12 +43,13 @@ public class DictionaryEntity {
     private String uuid;
 
     @Column
-    private String key;
+    private String dicKey;
 
     @Column
     private String value;
 
     // 报警标识 状态标识
+
     @Column
     private String type;
 

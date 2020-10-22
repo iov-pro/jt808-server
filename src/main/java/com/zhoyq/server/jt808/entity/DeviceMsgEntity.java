@@ -25,7 +25,6 @@ import java.util.Date;
  */
 @Table(
         name = "JT808_DEVICE_MSG",
-        schema = "PUBLIC",
         indexes = {
                 @Index(name = "JT808_DEVICE_MSG_INDEX_1", columnList = "device, sim, stream"),
                 @Index(name = "JT808_DEVICE_MSG_INDEX_2", columnList = "device, sim, msgId")

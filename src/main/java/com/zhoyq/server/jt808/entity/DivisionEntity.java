@@ -18,15 +18,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * @author zhoyq <a href="mailto:feedback@zhoyq.com">feedback@zhoyq.com</a>
  * @date 2020/4/25
  */
 @Table(
-        name = "JT808_DIVISION",
-        schema = "PUBLIC"
+        name = "JT808_DIVISION"
 )
 @Entity
 @Getter
