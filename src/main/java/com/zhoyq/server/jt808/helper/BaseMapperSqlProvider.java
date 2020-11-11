@@ -63,7 +63,7 @@ public class BaseMapperSqlProvider {
 
     private <T> String tableName(Class<T> clazz){
         Table tableInfo = clazz.getAnnotation(Table.class);
-        if ("".equals(tableInfo.schema())) {
+        if ("".equals(tableInfo.schema().trim())) {
             return tableInfo.name();
         }
         return tableInfo.schema() + "." + tableInfo.name();
