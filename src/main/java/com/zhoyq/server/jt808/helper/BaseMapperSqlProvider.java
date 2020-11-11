@@ -66,7 +66,7 @@ public class BaseMapperSqlProvider {
         if ("".equals(tableInfo.schema())) {
             return tableInfo.name();
         }
-        return tableInfo.schema() + "." + tableInfo.name();
+        return tableInfo.name();
     }
 
     private <T> void fillSelectColumn(SQL sql, Class<T> clazz){
