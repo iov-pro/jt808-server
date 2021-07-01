@@ -15,12 +15,10 @@
 package com.zhoyq.server.jt808.helper;
 
 import com.zhoyq.server.jt808.starter.config.Const;
-import com.zhoyq.server.jt808.starter.entity.AlarmInfo;
-import com.zhoyq.server.jt808.starter.entity.StatusInfo;
+import com.zhoyq.server.jt808.starter.dto.AlarmInfo;
+import com.zhoyq.server.jt808.starter.dto.StatusInfo;
 import com.zhoyq.server.jt808.starter.helper.ByteArrHelper;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,26 +29,22 @@ import java.util.Date;
  * @date 2020-09-09
  */
 @Slf4j
-@Component
-@AllArgsConstructor
 public class DataHelper {
-    ByteArrHelper byteArrHelper;
 
-    public Integer formatTracePartTemp(byte[] data){
+    public static Integer formatTracePartTemp(byte[] data){
         int rev = 1;
         if ((data[0] & Const.BIN_0X80) == Const.BIN_0X80) {
             rev = -1;
         }
-        return rev * byteArrHelper.twobyte2int(new byte[]{(byte)(data[0] & 0x7f), data[1]});
+        return rev * ByteArrHelper.twobyte2int(new byte[]{(byte)(data[0] & 0x7f), data[1]});
     }
 
-
-    public Long formatTraceDatetime(String datetime) {
+    public static Long formatTraceDatetime(String datetime) {
         Date date = formatDatetime(datetime);
         return date == null ? 0L : date.getTime();
     }
 
-    public Date formatDatetimeMs(String datetime) {
+    public static Date formatDatetimeMs(String datetime) {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yy-MM-dd-HH-mm-ss-ssss");
         try {
@@ -61,7 +55,7 @@ public class DataHelper {
         }
     }
 
-    public Date formatDatetime(String datetime) {
+    public static Date formatDatetime(String datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd-HH-mm-ss");
         try {
             return sdf.parse(datetime);
@@ -71,7 +65,7 @@ public class DataHelper {
         }
     }
 
-    public Date formatDate(String datetime) {
+    public static Date formatDate(String datetime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         try {
             return sdf.parse(datetime);
@@ -83,7 +77,7 @@ public class DataHelper {
 
 
 
-    public Integer genTraceAlarm(AlarmInfo alarmInfo) {
+    public static Integer genTraceAlarm(AlarmInfo alarmInfo) {
         int buf = 0x00000000;
 
         buf = alarmInfo.isEmergencyAlarm() ? buf | 0x00000001 : buf;
@@ -125,7 +119,7 @@ public class DataHelper {
         return buf;
     }
 
-    public Integer genTraceStatus(StatusInfo statusInfo) {
+    public static Integer genTraceStatus(StatusInfo statusInfo) {
         int buf = 0x00000000;
 
         buf = statusInfo.isAcc() ? buf | 0x00000001 : buf;
@@ -156,11 +150,11 @@ public class DataHelper {
         return buf;
     }
 
-    public Integer genTraceStatusExt(byte[] data) {
-        return byteArrHelper.fourbyte2int(data);
+    public static Integer genTraceStatusExt(byte[] data) {
+        return ByteArrHelper.fourbyte2int(data);
     }
 
-    public Short genIoStatus(byte[] data) {
-        return (short)byteArrHelper.twobyte2int(data);
+    public static Short genIoStatus(byte[] data) {
+        return (short)ByteArrHelper.twobyte2int(data);
     }
 }

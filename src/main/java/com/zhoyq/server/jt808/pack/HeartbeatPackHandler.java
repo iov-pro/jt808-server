@@ -28,12 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Jt808Pack(msgId = 0x0002)
 @AllArgsConstructor
 public class HeartbeatPackHandler implements PackHandler {
-
-    ResHelper resHelper;
-
     @Override
     public byte[] handle(byte[] phoneNum, byte[] streamNum, byte[] msgId, byte[] msgBody) {
         log.info("new heartbeat.");
-        return resHelper.getPlatAnswer(phoneNum, streamNum, msgId, (byte) 0x00);
+        return ResHelper.getPlatAnswer(phoneNum, streamNum, msgId, (byte) 0x00);
     }
 }

@@ -18,8 +18,7 @@ import com.zhoyq.server.jt808.helper.DataHelper;
 import com.zhoyq.server.jt808.mapper.*;
 import com.zhoyq.server.jt808.service.RelationService;
 import com.zhoyq.server.jt808.starter.config.Const;
-import com.zhoyq.server.jt808.starter.dto.SimAuthDto;
-import com.zhoyq.server.jt808.starter.entity.*;
+import com.zhoyq.server.jt808.starter.dto.*;
 import com.zhoyq.server.jt808.starter.helper.ByteArrHelper;
 import com.zhoyq.server.jt808.starter.service.DataService;
 import lombok.AllArgsConstructor;
@@ -45,8 +44,6 @@ public class SimpleDataServiceImpl implements DataService {
     DeviceMsgMapper deviceMsgMapper;
     VehicleDeviceSimLinkMapper vehicleDeviceSimLinkMapper;
     VehicleMapper vehicleMapper;
-    ByteArrHelper byteArrHelper;
-    DataHelper dataHelper;
     TraceMapper traceMapper;
     TraceAlarmMapper traceAlarmMapper;
     EventReportMapper eventReportMapper;
@@ -72,11 +69,11 @@ public class SimpleDataServiceImpl implements DataService {
      */
     @Override
     public void terminalRsa(String phone, byte[] e, byte[] n) {
-        log.info("{}, rsa [{}, {}]", phone, byteArrHelper.toHexString(e), byteArrHelper.toHexString(n));
+        log.info("{}, rsa [{}, {}]", phone, ByteArrHelper.toHexString(e), ByteArrHelper.toHexString(n));
         try {
             // 获取当前连接的设备ID
             String deviceId = getDeviceId(phone);
-            int count = deviceMapper.updateRsaById(deviceId, byteArrHelper.union(e, n));
+            int count = deviceMapper.updateRsaById(deviceId, ByteArrHelper.union(e, n));
             if (count == 1) {
                 log.info("{}, rsa update success !", phone);
             } else if (count == 0) {
@@ -122,6 +119,21 @@ public class SimpleDataServiceImpl implements DataService {
         } catch (Exception ex) {
             log.warn(ex.getMessage());
         }
+    }
+
+    @Override
+    public void terminalParameters(String sim, TerminalParameters parameters) {
+
+    }
+
+    @Override
+    public void terminalProperty(String sim, TerminalProperty property) {
+
+    }
+
+    @Override
+    public void terminalUpdateResult(String sim, TerminalUpdatePkgType type, TerminalUpdateResult result) {
+
     }
 
     /**
@@ -241,8 +253,8 @@ public class SimpleDataServiceImpl implements DataService {
         TraceEntity trace = new TraceEntity();
         trace.setUuid(UUID.randomUUID().toString());
 
-        trace.setTraceAlarm(dataHelper.genTraceAlarm(locationInfo.getAlarmInfo()));
-        trace.setTraceStatus(dataHelper.genTraceStatus(locationInfo.getStatusInfo()));
+        trace.setTraceAlarm(DataHelper.genTraceAlarm(locationInfo.getAlarmInfo()));
+        trace.setTraceStatus(DataHelper.genTraceStatus(locationInfo.getStatusInfo()));
 
         trace.setSim(phone);
         trace.setLatitude(locationInfo.getLatitude());
@@ -250,7 +262,7 @@ public class SimpleDataServiceImpl implements DataService {
         trace.setHeight(locationInfo.getHeight());
         trace.setSpeed(locationInfo.getSpeed());
         trace.setDirection(locationInfo.getDirection());
-        Long dateTime = dataHelper.formatTraceDatetime(locationInfo.getDatetime());
+        Long dateTime = DataHelper.formatTraceDatetime(locationInfo.getDatetime());
         trace.setReceiveTime(dateTime);
         trace.setReceiveServerTime(System.currentTimeMillis());
 
@@ -261,22 +273,22 @@ public class SimpleDataServiceImpl implements DataService {
             byte[] data = attach.getData();
             switch (attach.getId()) {
                 case 0x01:
-                    trace.setMileage((double)byteArrHelper.fourbyte2int(data) / 10D);
+                    trace.setMileage((double)ByteArrHelper.fourbyte2int(data) / 10D);
                     break;
                 case 0x02:
-                    trace.setOilMass((double)byteArrHelper.twobyte2int(data) / 10D);
+                    trace.setOilMass((double)ByteArrHelper.twobyte2int(data) / 10D);
                     break;
                 case 0x03:
-                    trace.setRecordSpeed((double)byteArrHelper.twobyte2int(data) / 10D);
+                    trace.setRecordSpeed((double)ByteArrHelper.twobyte2int(data) / 10D);
                     break;
                 case 0x04:
-                    trace.setHumanEnsureAlarmId(byteArrHelper.twobyte2int(data));
+                    trace.setHumanEnsureAlarmId(ByteArrHelper.twobyte2int(data));
                     break;
                 case 0x05:
-                    trace.setTirePressure(byteArrHelper.toHexString(data));
+                    trace.setTirePressure(ByteArrHelper.toHexString(data));
                     break;
                 case 0x06:
-                    trace.setPartTemp(dataHelper.formatTracePartTemp(data));
+                    trace.setPartTemp(DataHelper.formatTracePartTemp(data));
                     break;
                 case 0x11:
                     if(data.length == 1){
@@ -284,34 +296,34 @@ public class SimpleDataServiceImpl implements DataService {
                     } else {
                         trace.setOverSpeedPositionType(data[0]);
                         trace.setOverSpeedPositionId(
-                                byteArrHelper.fourbyte2int(new byte[]{data[1], data[2], data[3], data[4]}));
+                                ByteArrHelper.fourbyte2int(new byte[]{data[1], data[2], data[3], data[4]}));
                     }
                     break;
                 case 0x12:
                     trace.setInOutPositionType(data[0]);
                     trace.setInOutPositionId(
-                            byteArrHelper.fourbyte2int(new byte[]{data[1], data[2], data[3], data[4]})
+                            ByteArrHelper.fourbyte2int(new byte[]{data[1], data[2], data[3], data[4]})
                     );
                     trace.setInOutDirection(data[5]);
                     break;
                 case 0x13:
                     trace.setDriveTimePositionId(
-                            byteArrHelper.fourbyte2int(new byte[]{data[0], data[1], data[2], data[3]})
+                            ByteArrHelper.fourbyte2int(new byte[]{data[0], data[1], data[2], data[3]})
                     );
                     trace.setDriveTime(
-                            byteArrHelper.twobyte2int(new byte[]{data[4], data[5]})
+                            ByteArrHelper.twobyte2int(new byte[]{data[4], data[5]})
                     );
                     trace.setDriveTimeResult(data[6]);
                     break;
                 case 0x25:
-                    trace.setTraceStatusExt(dataHelper.genTraceStatusExt(data));
+                    trace.setTraceStatusExt(DataHelper.genTraceStatusExt(data));
                     break;
                 case 0x2A:
-                    trace.setIoStatus(dataHelper.genIoStatus(data));
+                    trace.setIoStatus(DataHelper.genIoStatus(data));
                     break;
                 case 0x2B:
-                    trace.setAd0(byteArrHelper.twobyte2int(new byte[]{data[2], data[3]}));
-                    trace.setAd1(byteArrHelper.twobyte2int(new byte[]{data[0], data[1]}));
+                    trace.setAd0(ByteArrHelper.twobyte2int(new byte[]{data[2], data[3]}));
+                    trace.setAd1(ByteArrHelper.twobyte2int(new byte[]{data[0], data[1]}));
                     break;
                 case 0x30:
                     trace.setSignalStrength(data[0]);
@@ -407,6 +419,11 @@ public class SimpleDataServiceImpl implements DataService {
         }
     }
 
+    @Override
+    public void questionAnswer(String sim, int answerStreamNumber, byte answerId) {
+
+    }
+
     /**
      * 信息点播
      */
@@ -484,8 +501,8 @@ public class SimpleDataServiceImpl implements DataService {
             entity.setIdCardNumber(driverInfo.getIdCardNumber());
             entity.setCertificateNumber(driverInfo.getCertificateNumber());
             entity.setCertificatePublishAgentName(driverInfo.getCertificatePublishAgentName());
-            entity.setCertificateLimitDate(dataHelper.formatDate(driverInfo.getCertificateLimitDate()));
-            entity.setDatetime(dataHelper.formatDatetime(driverInfo.getDatetime()));
+            entity.setCertificateLimitDate(DataHelper.formatDate(driverInfo.getCertificateLimitDate()));
+            entity.setDatetime(DataHelper.formatDatetime(driverInfo.getDatetime()));
             entity.setFromDate(new Date(System.currentTimeMillis()));
             DriverAlarmInfo driverAlarmInfo = driverInfo.getDriverAlarmInfo();
             if (driverAlarmInfo != null) {
@@ -514,7 +531,7 @@ public class SimpleDataServiceImpl implements DataService {
             entity.setData(canDataInfo.getData());
             entity.setType("can");
             entity.setFromDate(new Date(canDataInfo.getTimestamp()));
-            entity.setReceiveDate(dataHelper.formatDatetimeMs(canDataInfo.getReceiveTime()));
+            entity.setReceiveDate(DataHelper.formatDatetimeMs(canDataInfo.receiveTime()));
             uploadDataMapper.insert(entity);
         }
     }
@@ -575,7 +592,7 @@ public class SimpleDataServiceImpl implements DataService {
             entity.setDeviceId(deviceId);
             entity.setData(dataTransportInfo.getData());
             entity.setType("transport");
-            entity.setTransportType(dataTransportInfo.getType());
+            entity.setTransportType((int)dataTransportInfo.getType().getValue());
             entity.setFromDate(new Date(System.currentTimeMillis()));
             uploadDataMapper.insert(entity);
         }
@@ -617,11 +634,21 @@ public class SimpleDataServiceImpl implements DataService {
         List<VehicleDeviceSimLink> list = vehicleDeviceSimLinkMapper.selectAll(VehicleDeviceSimLink.class);
         List<SimAuthDto> res = new ArrayList<>(list.size());
         for (VehicleDeviceSimLink link: list) {
-            SimAuthDto simAuthDto = SimAuthDto.builder().build();
+            SimAuthDto simAuthDto = new SimAuthDto();
             simAuthDto.setSim(link.getSim());
             simAuthDto.setAuth(link.getAuth());
             res.add(simAuthDto);
         }
         return res;
+    }
+
+    @Override
+    public void suAlarmAttachInfo(String sim, SuAlarmAttachInfo alarmInfo) {
+
+    }
+
+    @Override
+    public void suAlarmFileInfo(String sim, SuAlarmFileInfo suAlarmFileInfo, byte[] data) {
+
     }
 }

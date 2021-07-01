@@ -12,7 +12,6 @@
 
 package com.zhoyq.server.jt808.entity;
 
-import com.zhoyq.server.jt808.starter.entity.DriverAlarmInfo;
 import lombok.Getter;
 import lombok.Setter;
 
