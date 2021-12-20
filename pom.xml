@@ -44,7 +44,7 @@
         <lombok.version>1.18.12</lombok.version>
         <hsqldb.version>2.5.0</hsqldb.version>
         <jackson.version>2.11.0</jackson.version>
-        <spring-boot-starter-jt808.version>1.4.0</spring-boot-starter-jt808.version>
+        <spring-boot-starter-jt808.version>1.5.0</spring-boot-starter-jt808.version>
     </properties>
 
     <dependencies>
@@ -53,6 +53,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.15.0</version>
         </dependency>
 
         <dependency>
