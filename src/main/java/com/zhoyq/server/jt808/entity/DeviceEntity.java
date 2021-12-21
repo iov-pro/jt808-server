@@ -30,10 +30,13 @@ import java.util.Date;
 @Getter
 @Setter
 public class DeviceEntity {
+
+    @Id
+    @Column
+    private String uuid;
     /**
      * 设备ID
      */
-    @Id
     @Column
     private String deviceId;
 
@@ -53,6 +56,9 @@ public class DeviceEntity {
      */
     @Column
     private byte[] rsa;
+
+    @Column
+    private String orgId;
 
     /**
      * 创建时间

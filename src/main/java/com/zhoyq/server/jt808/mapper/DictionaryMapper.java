@@ -28,13 +28,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DictionaryMapper extends BaseMapper<DictionaryEntity> {
     String TABLE_NAME = "JT808_DICTIONARY";
-    String EXIST_CONDITION = "and (thru_date is null or thru_date > CURRENT_TIMESTAMP)";
-    String COLUMNS = "uuid, dic_key as dicKey, value, type, from_date as fromDate, update_date as updateDate, thru_date as thruDate";
+    String EXIST_CONDITION = "(thru_date is null or thru_date > CURRENT_TIMESTAMP)";
+    String COLUMNS = "uuid, dic_key as dicKey, dic_value as value, dic_label as dicLabel, from_date as fromDate, update_date as updateDate, thru_date as thruDate";
 
 
     @Select("select " + COLUMNS +
             " from " + TABLE_NAME +
-            " where type = #{type} and dic_key = #{key} " + EXIST_CONDITION)
-    DictionaryEntity findByTypeAndKey(String type, String key);
+            " where dic_label = #{label} and dic_key = #{key} and " + EXIST_CONDITION)
+    DictionaryEntity findByLabelAndKey(String label, String key);
 
 }

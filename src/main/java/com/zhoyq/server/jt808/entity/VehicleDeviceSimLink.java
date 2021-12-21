@@ -48,6 +48,8 @@ public class VehicleDeviceSimLink {
     @Column
     private String auth;
     @Column
+    private String orgId;
+    @Column
     private Date fromDate;
     @Column
     private Date thruDate;

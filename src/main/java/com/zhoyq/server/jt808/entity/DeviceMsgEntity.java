@@ -45,7 +45,7 @@ public class DeviceMsgEntity {
      * 下发指令用户ID
      */
     @Column
-    private String user;
+    private String userName;
 
     /**
      * 报警车辆ID

@@ -2,9 +2,23 @@
 
 ## 介绍
 
-基于 [spring-boot-starter-jt808](https://github.com/zhoyq/spring-boot-starter-jt808) 二次开发包的完整工程
+基于 [spring-boot-starter-jt808](https://github.com/zhoyq/spring-boot-starter-jt808) 二次开发包的多租户车辆管理服务
 
 ## 版本特性
+
+### v1.4.0
+
+- 启动时，插入根组织
+- 增加新建组织的接口
+- 车辆、设备等和组织关联，主要用于多租户的权限范围管理
+- 增加 车辆管理接口
+- 增加 设备管理接口
+- 增加 车辆 设备 卡号 连接管理接口
+- 增加 虚拟群组（用户相关）接口
+- 增加 设备消息管理接口
+- 增加 下发指令接口
+- 规则1 车辆、设备、卡 是 多对多对多 的关系 方便一车多设备管理 以设备多卡 或者 一设备多车的情况
+- 规则2 组织内车辆、设备、卡号不可以重复添加
 
 ### v1.0.1
 
@@ -17,56 +31,6 @@
 - 完整存储 808 协议相关数据
 - 依赖 [spring-boot-starter-jt808](https://github.com/zhoyq/spring-boot-starter-jt808) 并保持最新版本
 - 默认会添加 测试用设备和车辆
-
-## 实体定义
-
-### 字典和地区
-
-- [x] DictionaryEntity ( uuid, key, value, type, fromDate, updateDate, thruDate )
-- [x] DivisionEntity ( id, name )
-
-### 设备、车辆、卡、以及定位数据的存储
-
-- [x] GroupEntity ( uuid, parent, title, link, fromDate, updateDate, thruDate )
-- [x] LinkEntity ( uuid, tableName, title, refUuid )
-- [x] VehicleEntity ( uuid, license, provinceId, cityId, licenseColor, vin, fromDate, updateDate, thruDate )
-- [x] DeviceEntity ( deviceId, manufacturer, model, rsa, fromDate, updateDate, thruDate )
-- [x] DeviceMsgEntity ( uuid, user, vehicle, device, sim, msgId, stream, sendTime, sendData, replyId, replyTime, 
-                        replyData, replyFlag)
-- [x] VehicleDeviceSimLink ( uuid, license, device, sim, auth, fromDate, updateDate, thruDate )
-- [x] UserGroupLink ( uuid, user, group, fromDate, updateDate, thruDate )
-
-- [x] TraceEntity ( uuid, sim, traceAlarm, traceStatus, longitude, latitude, height, speed, direction, receiveTime, 
-                    receiveServerTime, mileage, oilMass, recordSpeed, humanEnsureAlarmId, overSpeedPositionType, 
-                    overSpeedPositionId, inOutPositionType, inOutPositionId, inOutDirection, driveTimePositionId,
-                    driveTime, driveTimeResult, traceStatusExt, ioStatus, tirePressure, partTemp, ad0, ad1,
-                    signalStrength, gnssNumber )
-- [x] TraceAlarmEntity ( uuid, sim, alarmKey, startTime, endTime )
-
-### 事件上报相关
-
-- [x] EventEntity
-- [x] EventReportEntity
-- [x] DeviceEventEntity
-
-### 信息点播相关
-
-- [x] InfoEntity
-- [x] InfoOrderEntity
-- [x] DeviceInfoEntity
-
-### 电子运单相关
-
-- [x] ElectronicWaybillEntity
-
-### 驾驶员信息相关
-
-- [x] DriverInfoEntity
-
-### CAN总线 多媒体 透传 压缩
-
-- [x] MediaEntity 多媒体信息（不含实体）
-- [x] UploadDataEntity 包含CAN总线、多媒体实体、透传数据、压缩数据
 
 ## 如何使用
 
@@ -81,11 +45,6 @@ java -jar target/jt808-server.jar
 # java -jar target/jt808-server.jar --spring.profiles.active=mysql5
 # 808 服务端口默认是 10001
 ```
-
-除了源码打包的方式还可以直接下载已经打好的jar包，要求JDK版本在15及以上。
-
-- 链接：[https://pan.baidu.com/s/1Mf7ycHFb3MHMRIlvYbjRfw](https://pan.baidu.com/s/1Mf7ycHFb3MHMRIlvYbjRfw) 
-- 提取码：`1g2r`
 
 ## FAQ
 

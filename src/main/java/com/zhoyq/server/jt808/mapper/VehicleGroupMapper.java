@@ -14,7 +14,7 @@
 
 package com.zhoyq.server.jt808.mapper;
 
-import com.zhoyq.server.jt808.entity.LinkEntity;
+import com.zhoyq.server.jt808.entity.VehicleGroupEntity;
 import com.zhoyq.server.jt808.helper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -25,5 +25,5 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface LinkMapper extends BaseMapper<LinkEntity> {
+public interface VehicleGroupMapper extends BaseMapper<VehicleGroupEntity> {
 }

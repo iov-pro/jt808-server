@@ -29,7 +29,7 @@ import java.util.Date;
         indexes = {
                 @Index(
                         name = "JT808_DICTIONARY_INDEX_TYPE_KEY",
-                        columnList = "type, dicKey"
+                        columnList = "dicLabel, dicKey"
                 )
         }
 
@@ -46,12 +46,10 @@ public class DictionaryEntity {
     private String dicKey;
 
     @Column
-    private String value;
-
-    // 报警标识 状态标识
+    private String dicValue;
 
     @Column
-    private String type;
+    private String dicLabel;
 
     @Column
     private Date fromDate;

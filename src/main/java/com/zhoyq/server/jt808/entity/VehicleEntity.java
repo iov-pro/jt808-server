@@ -66,6 +66,9 @@ public class VehicleEntity {
     @Column(length = 17)
     private String vin;
 
+    @Column
+    private String orgId;
+
     /**
      * 生效时间
      */

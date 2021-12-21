@@ -15,6 +15,7 @@ package com.zhoyq.server.jt808.mapper;
 import com.zhoyq.server.jt808.entity.DeviceEntity;
 import com.zhoyq.server.jt808.helper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceMapper extends BaseMapper<DeviceEntity> {
     String TABLE_NAME = "JT808_DEVICE";
-    String EXIST_CONDITION = "and (thru_date is null or thru_date > CURRENT_TIMESTAMP)";
+    String EXIST_CONDITION = "(thru_date is null or thru_date > CURRENT_TIMESTAMP)";
+    String COLUMNS = "";
 
     /**
      * 更新设备加密信息
@@ -35,6 +37,9 @@ public interface DeviceMapper extends BaseMapper<DeviceEntity> {
      * @return 更新数量
      */
     @Update("update " + TABLE_NAME + " set rsa = #{rsa}, update_date=CURRENT_TIMESTAMP " +
-            "where device_id=#{deviceId} " + EXIST_CONDITION)
-    int updateRsaById(String deviceId, byte[] rsa);
+            "where device_id=#{deviceId} and " + EXIST_CONDITION)
+    int updateRsaByDeviceId(String deviceId, byte[] rsa);
+
+    @Select("select ")
+    DeviceEntity selectByDeviceId(String deviceId);
 }

@@ -73,7 +73,7 @@ public class SimpleDataServiceImpl implements DataService {
         try {
             // 获取当前连接的设备ID
             String deviceId = getDeviceId(phone);
-            int count = deviceMapper.updateRsaById(deviceId, ByteArrHelper.union(e, n));
+            int count = deviceMapper.updateRsaByDeviceId(deviceId, ByteArrHelper.union(e, n));
             if (count == 1) {
                 log.info("{}, rsa update success !", phone);
             } else if (count == 0) {
@@ -180,7 +180,7 @@ public class SimpleDataServiceImpl implements DataService {
         // 查询 是否存在车辆
         VehicleEntity vehicleEntity = vehicleMapper.findByLicense(registerLicense);
         // 查询 是否存在终端
-        DeviceEntity deviceEntity = deviceMapper.selectById(DeviceEntity.class, deviceId);
+        DeviceEntity deviceEntity = deviceMapper.selectByDeviceId(deviceId);
 
         if (vehicleEntity == null) {
             // 没有车牌号 查询是否存在 车辆大架号

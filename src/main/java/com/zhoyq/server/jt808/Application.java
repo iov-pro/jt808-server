@@ -26,8 +26,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
     public static void main (String[] args) {
         var app = new SpringApplication(Application.class);
-        // 不使用web容器 仅启动jt808服务
-        app.setWebApplicationType(WebApplicationType.NONE);
+        // 不使用web容器 可以注释此行代码
+//        app.setWebApplicationType(WebApplicationType.NONE);
         app.run(args);
     }
 }
